@@ -1,0 +1,125 @@
+watches-online/
+├── backend/                       # Бэкенд (Node.js + Express + Prisma)
+│   ├── prisma/                    # Всё, что связано с Prisma и БД
+│   │   ├── schema.prisma          # Основная схема БД (модели из вашей lab3)
+│   │   └── migrations/            # Автогенерируемые миграции (не редактировать вручную)
+│   │
+│   ├── src/
+│   │   ├── config/                # Конфигурации
+│   │   │   ├── index.ts           # Общий конфиг (env, порт и т.д.)
+│   │   │   └── db.ts              # Подключение Prisma Client
+│   │   │
+│   │   ├── controllers/           # Логика обработки запросов
+│   │   │   ├── auth.controller.ts
+│   │   │   ├── product.controller.ts
+│   │   │   ├── order.controller.ts
+│   │   │   ├── category.controller.ts
+│   │   │   └── brand.controller.ts
+│   │   │
+│   │   ├── routes/                # Маршруты (роутинг)
+│   │   │   ├── index.ts           # Главный роутер (собирает все)
+│   │   │   ├── auth.routes.ts
+│   │   │   ├── products.routes.ts
+│   │   │   ├── orders.routes.ts
+│   │   │   └── admin.routes.ts
+│   │   │
+│   │   ├── services/              # Бизнес-логика (опционально, но рекомендуется)
+│   │   │   ├── auth.service.ts
+│   │   │   ├── product.service.ts
+│   │   │   └── order.service.ts
+│   │   │
+│   │   ├── middleware/            # Промежуточные обработчики
+│   │   │   ├── auth.middleware.ts     # JWT / проверка роли
+│   │   │   ├── error.middleware.ts
+│   │   │   └── validate.middleware.ts  # (zod / joi)
+│   │   │
+│   │   ├── utils/                 # Вспомогательные утилиты
+│   │   │   ├── jwt.ts
+│   │   │   └── logger.ts
+│   │   │
+│   │   ├── types/                 # TypeScript типы (если нужно)
+│   │   │   └── index.ts
+│   │   │
+│   │   └── server.ts              # Точка входа (app = express(), listen)
+│   │
+│   ├── .env                       # DATABASE_URL, JWT_SECRET, PORT и т.д.
+│   ├── .env.example
+│   ├── package.json
+│   ├── tsconfig.json
+│   └── README.md
+│
+├── frontend/                      # React (Vite или CRA)
+│   ├── public/
+│   │   ├── index.html
+│   │   ├── favicon.ico
+│   │   └── robots.txt
+│   │
+│   ├── src/
+│   │   ├── assets/                # Изображения, шрифты, иконки
+│   │   │   ├── images/
+│   │   │   └── logo.svg
+│   │   │
+│   │   ├── components/            # Переиспользуемые компоненты
+│   │   │   ├── ui/                # Атомарные / общие (Button, Card, Input…)
+│   │   │   ├── ProductCard.tsx
+│   │   │   ├── Header.tsx
+│   │   │   ├── Footer.tsx
+│   │   │   ├── CartIcon.tsx
+│   │   │   └── LoadingSpinner.tsx
+│   │   │
+│   │   ├── features/              # Фичи / страницы (по доменам)
+│   │   │   ├── auth/
+│   │   │   │   ├── LoginPage.tsx
+│   │   │   │   ├── RegisterPage.tsx
+│   │   │   │   └── ForgotPassword.tsx
+│   │   │   │
+│   │   │   ├── catalog/
+│   │   │   │   ├── CatalogPage.tsx
+│   │   │   │   ├── ProductList.tsx
+│   │   │   │   └── Filters.tsx
+│   │   │   │
+│   │   │   ├── product/
+│   │   │   │   └── ProductDetailPage.tsx
+│   │   │   │
+│   │   │   ├── cart/
+│   │   │   │   └── CartPage.tsx
+│   │   │   │
+│   │   │   ├── checkout/
+│   │   │   │   └── CheckoutPage.tsx
+│   │   │   │
+│   │   │   └── profile/
+│   │   │       └── ProfilePage.tsx
+│   │   │
+│   │   ├── pages/                 # Если не используете feature-folders — альтернативный вариант
+│   │   │
+│   │   ├── hooks/                 # Кастомные хуки
+│   │   │   ├── useAuth.ts
+│   │   │   ├── useCart.ts
+│   │   │   └── useProducts.ts
+│   │   │
+│   │   ├── lib/                   # Утилиты, api-клиент
+│   │   │   ├── api.ts             # axios / fetch инстанс с baseURL
+│   │   │   └── constants.ts
+│   │   │
+│   │   ├── store/                 # Zustand / Redux Toolkit (если используете)
+│   │   │   ├── cartStore.ts
+│   │   │   └── authStore.ts
+│   │   │
+│   │   ├── types/                 # Общие типы (Product, Order, User…)
+│   │   │   └── index.ts
+│   │   │
+│   │   ├── App.tsx
+│   │   ├── main.tsx               # (или index.tsx)
+│   │   └── index.css              # Глобальные стили
+│   │
+│   ├── .env                       # VITE_API_URL=http://localhost:5000
+│   ├── .env.example
+│   ├── vite.config.ts             # (или если CRA — другие файлы)
+│   ├── tsconfig.json
+│   ├── package.json
+│   └── README.md
+│
+├── docker-compose.yml             # Опционально — для запуска PostgreSQL + backend + frontend
+├── .gitignore
+├── README.md                      # Общее описание проекта
+└── package.json                   # Только если делаете workspace (monorepo с pnpm/yarn/npm workspaces)
