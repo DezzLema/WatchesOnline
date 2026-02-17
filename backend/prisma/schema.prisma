@@ -1,0 +1,130 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Customer {
+  id             Int       @id @default(autoincrement())
+  fullName       String    @map("full_name")
+  email          String    @unique
+  passwordHash   String    @map("password_hash")
+  phone          String?
+  defaultAddress String?   @map("default_address")
+  registeredAt   DateTime  @default(now()) @map("registered_at")
+  orders         Order[]
+  
+  @@map("customers")
+}
+
+model Brand {
+  id          Int       @id @default(autoincrement())
+  name        String    @unique
+  country     String?
+  description String?
+  logoUrl     String?   @map("logo_url")
+  products    Product[]
+  
+  @@map("brands")
+}
+
+model Category {
+  id          Int       @id @default(autoincrement())
+  name        String    @unique
+  description String?
+  products    ProductCategory[]
+  
+  @@map("categories")
+}
+
+model Product {
+  article          String             @id
+  model            String
+  brandId          Int                @map("brand_id")
+  brand            Brand              @relation(fields: [brandId], references: [id])
+  price            Float
+  oldPrice         Float?             @map("old_price")
+  description      String?
+  mechanismType    String?             @map("mechanism_type")
+  caseMaterial     String?             @map("case_material")
+  strapMaterial    String?             @map("strap_material")
+  waterResistance  String?             @map("water_resistance")
+  caseDiameter     Int?                @map("case_diameter")
+  dialColor        String?             @map("dial_color")
+  stockQuantity    Int                 @default(0) @map("stock_quantity")
+  mainImageUrl     String?             @map("main_image_url")
+  createdAt        DateTime            @default(now()) @map("created_at")
+  categories       ProductCategory[]
+  orderItems       OrderItem[]
+  
+  @@map("products")
+}
+
+model ProductCategory {
+  productArticle  String   @map("product_article")
+  product         Product  @relation(fields: [productArticle], references: [article])
+  categoryId      Int      @map("category_id")
+  category        Category @relation(fields: [categoryId], references: [id])
+  
+  @@id([productArticle, categoryId])
+  @@map("product_categories")
+}
+
+model Order {
+  id               Int          @id @default(autoincrement())
+  customerId       Int          @map("customer_id")
+  customer         Customer     @relation(fields: [customerId], references: [id])
+  orderDate        DateTime     @default(now()) @map("order_date")
+  totalAmount      Float        @map("total_amount")
+  statusId         Int          @map("status_id")
+  status           OrderStatus  @relation(fields: [statusId], references: [id])
+  deliveryMethodId Int?         @map("delivery_method_id")
+  deliveryMethod   DeliveryMethod? @relation(fields: [deliveryMethodId], references: [id])
+  deliveryAddress  String?      @map("delivery_address")
+  paymentMethodId  Int?         @map("payment_method_id")
+  paymentMethod    PaymentMethod? @relation(fields: [paymentMethodId], references: [id])
+  items            OrderItem[]
+  
+  @@map("orders")
+}
+
+model OrderItem {
+  orderId          Int     @map("order_id")
+  order            Order   @relation(fields: [orderId], references: [id])
+  productArticle   String  @map("product_article")
+  product          Product @relation(fields: [productArticle], references: [article])
+  quantity         Int
+  priceAtPurchase  Float   @map("price_at_purchase")
+  
+  @@id([orderId, productArticle])
+  @@map("order_items")
+}
+
+model DeliveryMethod {
+  id             Int     @id @default(autoincrement())
+  name           String
+  cost           Float?
+  estimatedDays  Int?    @map("estimated_days")
+  orders         Order[]
+  
+  @@map("delivery_methods")
+}
+
+model PaymentMethod {
+  id          Int     @id @default(autoincrement())
+  name        String
+  description String?
+  orders      Order[]
+  
+  @@map("payment_methods")
+}
+
+model OrderStatus {
+  id          Int     @id @default(autoincrement())
+  statusName  String  @unique @map("status_name")
+  orders      Order[]
+  
+  @@map("order_statuses")
+}
